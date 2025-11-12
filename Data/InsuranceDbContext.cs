@@ -124,5 +124,19 @@ public class InsuranceDbContext : DbContext
             .HasForeignKey(e => e.UserId)
             .OnDelete(DeleteBehavior.Restrict);
         });
+
+        SeedData(modelBuilder);
+    }
+
+    private void SeedData(ModelBuilder modelBuilder)
+    {
+        modelBuilder.Entity<User>().HasData(new User
+        {
+            Id = 1,
+            Email = "admin@insuranceapi.com",
+            PasswordHash = BCrypt.Net.BCrypt.HashPassword("Admin123!"),
+            Role = UserRole.Admin,
+            CreatedAt = DateTime.UtcNow
+        });
     }
 }
