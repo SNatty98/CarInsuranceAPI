@@ -16,8 +16,8 @@ namespace InsuranceAPI.Models
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 
         // Relationships
-        public User User = new User();
-        public ICollection<Quote> Quotes = new List<Quote>();
-        public ICollection<Policy> Policies = new List<Policy>();
+        public User User { get; set; } = new User();
+        public ICollection<Quote> Quotes { get; set; } = new List<Quote>();
+        public ICollection<Policy> Policies { get; set; } = new List<Policy>();
     }
 }

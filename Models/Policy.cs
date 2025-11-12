@@ -21,7 +21,7 @@ namespace InsuranceAPI.Models
         public User User { get; set; } = new User();
         public Quote Quote { get; set; } = new Quote();
         public Vehicle Vehicle { get; set; } = new Vehicle();
-        public ICollection<PolicyDriver> Drivers { get; set; } = new List<PolicyDriver>();
+        public ICollection<PolicyDriver> PolicyDrivers { get; set; } = new List<PolicyDriver>();
         public ICollection<Claim> Claims { get; set; } = new List<Claim>();
     }
 }
