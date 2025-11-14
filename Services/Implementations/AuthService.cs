@@ -3,6 +3,7 @@ using InsuranceAPI.DTOs.Auth;
 using InsuranceAPI.Models;
 using InsuranceAPI.Data.Enums;
 using InsuranceAPI.Data.Repositories.Interfaces;
+using InsuranceAPI.Exceptions;
 
 namespace InsuranceAPI.Services.Implementations
 {
@@ -20,12 +21,7 @@ namespace InsuranceAPI.Services.Implementations
         {
             if (await _userRepository.EmailAlreadyExistsAsync(request.Email))
             {
-                throw new InvalidOperationException("Email already exists.");
-            }
-
-            if (request.Password != request.PasswordConfirmation)
-            {
-                throw new InvalidOperationException("Passwords do not match.");
+                throw new ConflictException("Email already exists.");
             }
 
             var user = new User
@@ -38,18 +34,13 @@ namespace InsuranceAPI.Services.Implementations
             return await _userRepository.AddAsync(user);
         }
 
-        public async Task<User?> LoginRequest(LoginRequest request)
+        public async Task<User> LoginAsync(LoginRequest request)
         {
             var user = await _userRepository.GetByEmailAsync(request.Email);
 
-            if (user == null)
+            if (user == null || !BCrypt.Net.BCrypt.Verify(request.Password, user.PasswordHash))
             {
-                return null;
-            }
-
-            if (!BCrypt.Net.BCrypt.Verify(request.Password, user.PasswordHash))
-            {
-                return null;
+                throw new UnauthorisedException("Invalid email or password.");
             }
 
             return user;
